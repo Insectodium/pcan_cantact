@@ -112,7 +112,7 @@ C_INCLUDES =  \
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fno-common -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -Wpedantic -Wextra -fno-common -fdata-sections -ffunction-sections -std=c99 $(BOARD_FLAGS)
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -Wpedantic -Wextra -fno-common -fdata-sections -ffunction-sections -std=c99 $(BOARD_FLAGS) -D BOARD=$(BOARD)
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -137,7 +137,7 @@ LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BU
 .PHONY : all
 
 # default action: build all
-all: cantact-16 cantact-8 entree canable
+all: cantact-16 cantact-8 entree canable ollie
 
 cantact-16: 
 	$(MAKE) BOARD=cantact-16 DEBUG=0 OPT=-Os BOARD_FLAGS='-DEXTERNAL_CLOCK=16 -DHSE_VALUE=16000000' elf hex bin
@@ -151,6 +151,8 @@ entree:
 canable: 
 	$(MAKE) BOARD=canable DEBUG=0 OPT=-Os elf hex bin
 
+ollie: 
+	$(MAKE) BOARD=ollie DEBUG=0 OPT=-Os elf hex bin
 #######################################
 # build the application
 #######################################

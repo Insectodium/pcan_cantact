@@ -300,7 +300,9 @@ static void pcan_rx_message( can_message_t *msg )
     return;
   if( ( msg->flags & CAN_FLAG_ECHO ) == 0 )
   {
+#if BOARD != ollie
     pcan_led_set_mode( LED_CH0_RX, LED_MODE_BLINK_FAST, 237 );
+#endif
   }
 
   pcan_rx_can_frame( &pcan_records, msg );
@@ -389,9 +391,9 @@ static uint8_t pcan_decode_data_frame( uint8_t *ptr, uint16_t size, uint8_t flag
   }
 
   msg.timestamp = pcan_timestamp_ticks();
-
+#if BOARD != ollie
   pcan_led_set_mode( LED_CH0_TX, LED_MODE_BLINK_FAST, 237 );
-
+#endif
 #if WAIT_FOR_TXSLOTS
   const uint16_t ts_poll = pcan_timestamp_ticks();
   /* need more time to send data... ? */
@@ -543,7 +545,9 @@ void pcan_protocol_process_command( uint8_t *ptr, uint16_t size )
         /* set CAN on/off*/
         case 0x03:
           pcan_device.bus_active = cmd->param[0];
+#if BOARD != ollie
           pcan_led_set_mode( LED_STAT, pcan_device.bus_active ? LED_MODE_BLINK_SLOW:LED_MODE_OFF, 0 );
+#endif
           pcan_can_set_bus_active( pcan_device.bus_active );
 
           if( pcan_device.bus_active )
@@ -553,8 +557,10 @@ void pcan_protocol_process_command( uint8_t *ptr, uint16_t size )
             pcan_timesync_event( &pcan_records );
           }
           /* led state */
+#if BOARD != ollie
           pcan_led_set_mode( LED_CH0_TX, pcan_device.bus_active ? LED_MODE_OFF:LED_MODE_ON, 0 );
           pcan_led_set_mode( LED_CH0_RX, pcan_device.bus_active ? LED_MODE_OFF:LED_MODE_ON, 0 );
+#endif
         break;
         /* set device id 0-255 */
         case 0x04:

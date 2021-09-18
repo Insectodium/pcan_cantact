@@ -204,10 +204,10 @@ static uint8_t  device_setup( USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
                                   0x04, 0x02, 0xe0, 0x07, 0x01, 0x00, 0x00, 0x00
                                 };
           USBD_CtlSendData( pdev, (void*)bootloader_info, sizeof( bootloader_info ) );
-
+#if BOARD != ollie
           pcan_led_set_mode( LED_CH0_RX, LED_MODE_ON, 0 );
           pcan_led_set_mode( LED_CH0_TX, LED_MODE_ON, 0 );
-
+#endif
           /* reset endpoints */
           pcan_flush_ep( PCAN_USB_EP_MSGIN );
           pcan_flush_ep( PCAN_USB_EP_CMDIN );

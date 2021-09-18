@@ -2,7 +2,7 @@
 #include "stm32f0xx_hal.h"
 #include "pcan_timestamp.h"
 #include "pcan_led.h"
-
+#if BOARD != BOARD_ollie
 static struct
 {
   uint16_t mode;
@@ -107,3 +107,4 @@ void pcan_led_poll( void )
     pcan_led_update_state( i, led_mode_array[i].state );
   }
 }
+#endif
